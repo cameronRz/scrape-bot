@@ -1,4 +1,5 @@
 import { SiteContentRecord, XataClient } from '../xata';
+import { logger } from '../utils/logger';
 
 export class XataService {
   private xata: XataClient;
@@ -11,7 +12,7 @@ export class XataService {
     try {
       return this.xata.db.SiteContent.getAll();
     } catch (error: any) {
-      console.log(error);
+      logger.error(`Error retrieving SiteContent records: ${error.message}`);
     }
   }
 
@@ -19,18 +20,18 @@ export class XataService {
     try {
       await this.xata.db.SiteContent.update(siteContent.id, { body });
     } catch (error: any) {
-      console.log(error);
+      logger.error(`Error updating SiteContent record ${siteContent.id}: ${error.message}`);
     }
   }
 
-  async saveSiteContent(url: string, body: string) {
+  async createSiteContent(url: string, body: string) {
     try {
       await this.xata.db.SiteContent.create({
         url,
         body,
       });
     } catch (error: any) {
-      console.log(error);
+      logger.error(`Error creating SiteContent record: ${error.message}`);
     }
   }
 

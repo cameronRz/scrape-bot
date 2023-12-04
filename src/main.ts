@@ -1,10 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { WebScraper } from './services/web-scraper';
+import { startServer } from './server';
 
-const scraper = new WebScraper();
-
-(async () => {
-  await scraper.scrapeSite('https://developer.chrome.com/');
-})();
+startServer();

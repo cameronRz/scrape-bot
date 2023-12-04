@@ -1,6 +1,7 @@
 import puppeteer, { Page } from 'puppeteer';
 import * as cheerio from 'cheerio';
 import { XataService } from './xata-service';
+import { logger } from '../utils/logger';
 
 export class WebScraper {
   private xataService: XataService;
@@ -18,6 +19,7 @@ export class WebScraper {
     await page.goto(url);
 
     const links = await this.getPageLinks(page, url);
+    logger.info(`${links.length} unique links found.`);
 
     for (const link of links) {
       await page.goto(link);
@@ -26,12 +28,13 @@ export class WebScraper {
       const body = await this.extractPageText(page);
 
       if (!siteContentRecord) {
-        await this.xataService.saveSiteContent(link, body);
+        logger.info(`Creating new SiteContent record for ${link}`);
+        await this.xataService.createSiteContent(link, body);
       } else {
-
         const diff = this.xataService.contentDiff(siteContentRecord.body as string, body);
 
         if (diff) {
+          logger.info(`Updating SiteContent record for ${siteContentRecord.id}`);
           await this.xataService.updateSiteContent(siteContentRecord, body);
         }
       }
