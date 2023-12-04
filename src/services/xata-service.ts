@@ -35,6 +35,24 @@ export class XataService {
     }
   }
 
+  async ask(question: string) {
+    try {
+      const result = await this.xata.db.SiteContent.ask(question, {
+        searchType: 'keyword',
+        search: {
+          fuzziness: 1,
+          prefix: 'disabled',
+          target: ['body'],
+        },
+      });
+
+      return result.answer;
+    } catch (error: any) {
+      logger.error(`Error retrieving answer from Ask AI: ${error.message}`);
+      return 'Uh-oh, something went wrong.';
+    }
+  }
+
   contentDiff(a: string, b: string) {
     const dp = Array.from(Array(a.length + 1), () => Array(b.length + 1).fill(0));
 
