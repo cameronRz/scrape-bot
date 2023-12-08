@@ -9,7 +9,7 @@ app.use(express.json());
 app.use('/ask', askRouter);
 
 export const startServer = () => {
-  app.listen(PORT, () => {
-    console.log(`App running on port ${PORT}`);
-  });
+    app.listen(PORT, () => {
+        console.log(`App running on port ${PORT}`);
+    });
 };
