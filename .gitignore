@@ -4,3 +4,4 @@ node_modules
 .xata
 .xatarc
 src/xata.ts
+dist
